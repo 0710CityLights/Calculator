@@ -19,10 +19,14 @@ buttons.forEach(function(button) {
 
         let getInput = this.textContent;
 
-        if (/\d/.test(getInput)) {
+        if (display.textContent.includes("Total:") ) {
+            clear();
+        }
+
+        else if (/\d/.test(getInput)) {
             console.log(getInput);
             storeOperands(getInput);
-            isEquals = false;
+          
         }
         else if (getInput == "C") {
             clear();
@@ -32,16 +36,17 @@ buttons.forEach(function(button) {
             handleOperator(getInput);
         }
         else if (getInput == "=") {
-            if (!numA && !numB || !storeOperator) {
+            if (numA === "" || numB === "" || storeOperator === "") {
                 temp = "Error.";
                 resultDisplay(temp);
-                clear();
+                display.textContent = `Clear the display.`;
             }
             else {
                 isEquals = true;
                 total = operate(Number(numA), storeOperator, Number(numB));
                 storeOperator = "";
                 console.log("OP: " + storeOperator);
+                console.log(isEquals);
                 resultDisplay(total);
                 total = "";
             }
@@ -53,25 +58,27 @@ buttons.forEach(function(button) {
 
 });
 
-// function appendToDisplay(input) {
-//     let newNum = display.textContent;
-
-
-
-// }
 
 function handleOperator(input) {
 
-    if(numA != "" && numB != "") {
-
+    if (numA != "" && numB != "") {
+        display.textContent = "";
+        display.textContent = operate(Number(numA), storeOperator, Number(numB));
+        numA = operate(Number(numA), storeOperator, Number(numB));
+        display.textContent = numA;
+        console.log(numA);
+        numB = "";
         
-
     }
-
     storeOperator = input;
     display.textContent = storeOperator;
     isEquals = false;
     
+}
+
+function setDisplay(input) {
+    showOp = display.textContent;
+
 }
 
 
@@ -93,13 +100,13 @@ function storeOperands(input) {
 
 function resultDisplay(input) {
     
-    display.textContent = input;
+    display.textContent = `Total: ${input} `;
     
 }
 
 
 function clear() {
-    display.textContent = "0";
+    display.textContent = "";
     displayNum = "";
     numA = "";
     numB = "";
